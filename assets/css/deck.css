@@ -1,0 +1,313 @@
+/* =========================================================
+   확률과 통계 HTML 덱 — 공통 레이아웃 + 디자인 컨셉 2종
+   A: data-concept="ppt"     (R02 코드코리아 PPT 양식)
+   B: data-concept="discord" (루트 DESIGN.md)
+   ========================================================= */
+
+/* ---------- 컨셉 A: PPT 양식 ---------- */
+:root,
+:root[data-concept="ppt"] {
+  color-scheme: light;
+  --letterbox: #e6e6e6;
+  --bg: #ffffff;
+  --ink: #3f3f3f;
+  --ink-strong: #1f1f1f;
+  --muted: #8a8a8a;
+  --accent: #e32a2c;
+  --accent-ink: #ffffff;
+  --surface: #f4f4f4;
+  --surface-2: #e9e9e9;
+  --hair: #d9d9d9;
+  --radius: 0px;
+  --radius-lg: 0px;
+  --font-body: "Pretendard", "Malgun Gothic", system-ui, sans-serif;
+  --font-display: "Pretendard", "Malgun Gothic", system-ui, sans-serif;
+  --hl-size: 26px;
+  --hl-weight: 700;
+  /* 그래프 */
+  --viz-1: #e32a2c;      /* 주 데이터 (막대·점) */
+  --viz-2: #2b2b2b;      /* 이론값 (곡선·기댓값) */
+  --viz-hi: #e32a2c;     /* 강조·빗나감 */
+  --viz-ok: #6f6f6f;     /* 정상·포함 */
+  --viz-soft: rgba(227, 42, 44, 0.16);
+  --viz-grid: #ececec;
+  --viz-axis: #9a9a9a;
+  --viz-ink: #3f3f3f;
+}
+
+/* ---------- 컨셉 B: Discord (DESIGN.md) ---------- */
+:root[data-concept="discord"] {
+  color-scheme: dark;
+  --letterbox: #05071f;
+  --bg: #0a0d3a;
+  --ink: #e9ebff;
+  --ink-strong: #ffffff;
+  --muted: #a3a8d9;
+  --accent: #5865f2;
+  --accent-ink: #ffffff;
+  --magenta: #ec48bd;
+  --green: #35ed7e;
+  --surface: #1e2353;
+  --surface-2: #272d66;
+  --hair: #2f3570;
+  --radius: 16px;
+  --radius-lg: 40px;
+  --font-body: "Pretendard", "Malgun Gothic", system-ui, sans-serif;
+  --font-display: "Hanken Grotesk", "Pretendard", system-ui, sans-serif;
+  --hl-size: 40px;
+  --hl-weight: 800;
+  --viz-1: #8891f7;
+  --viz-2: #35ed7e;
+  --viz-hi: #ec48bd;
+  --viz-ok: #8891f7;
+  --viz-soft: rgba(53, 237, 126, 0.16);
+  --viz-grid: #1c2150;
+  --viz-axis: #5b62a6;
+  --viz-ink: #c9cdf5;
+}
+
+* { box-sizing: border-box; }
+html, body { height: 100%; }
+body {
+  margin: 0;
+  background: var(--letterbox);
+  color: var(--ink);
+  font-family: var(--font-body);
+  overflow: hidden;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ---------- 무대 (1280×720 고정 → 창 크기에 맞춰 축소) ---------- */
+.stage {
+  position: absolute;
+  left: 50%; top: 50%;
+  width: 1280px; height: 720px;
+  transform-origin: center center;
+  background: var(--bg);
+  overflow: hidden;
+  box-shadow: 0 10px 40px rgba(0,0,0,.18);
+}
+.slide {
+  position: absolute; inset: 0;
+  padding: 96px 72px 64px;
+  opacity: 0; visibility: hidden;
+  transition: opacity .35s ease, visibility 0s linear .35s;
+}
+.slide.active { opacity: 1; visibility: visible; transition: opacity .35s ease; z-index: 2; }
+
+/* 푸터 */
+.foot {
+  position: absolute; left: 0; right: 0; bottom: 0; height: 40px;
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 0 28px; font-size: 13px; color: var(--muted); z-index: 5;
+  pointer-events: none;
+}
+.foot b { color: var(--ink); font-weight: 600; }
+
+/* ---------- 공통 요소 ---------- */
+.sh { position: absolute; left: 0; right: 0; top: 20px; height: 46px; display: flex; align-items: center; justify-content: space-between; }
+.sh-num, .sh-sec { font-weight: 700; }
+.hl { margin: 0 0 22px; font-family: var(--font-display); font-size: var(--hl-size); font-weight: var(--hl-weight); color: var(--ink-strong); display: flex; align-items: center; gap: 14px; line-height: 1.2; letter-spacing: -0.01em; }
+.hl .star { flex: none; width: 34px; height: 34px; }
+.sub { font-size: 20px; line-height: 1.6; margin: 0; }
+.muted { color: var(--muted); }
+.label { position: absolute; left: 72px; right: 72px; bottom: 56px; margin: 0; font-size: 17px; display: flex; gap: 12px; align-items: baseline; }
+.label b { flex: none; font-size: 14px; padding: 3px 10px; background: var(--accent); color: var(--accent-ink); border-radius: var(--radius); font-weight: 700; }
+.ref { font-size: 13px; color: var(--muted); margin-left: auto; white-space: nowrap; }
+.two { display: grid; grid-template-columns: 1.35fr 1fr; gap: 36px; align-items: start; }
+.two.even { grid-template-columns: 1fr 1fr; }
+.panel { background: var(--surface); border-radius: var(--radius-lg); padding: 22px 26px; }
+.bul { margin: 0; padding: 0; list-style: none; font-size: 19px; line-height: 1.55; }
+.bul li { position: relative; padding-left: 18px; margin-bottom: 8px; }
+.bul li::before { content: ""; position: absolute; left: 0; top: .72em; width: 7px; height: 7px; background: var(--accent); border-radius: 50%; }
+.formula { font-size: 22px; padding: 14px 18px; background: var(--surface); border-left: 4px solid var(--accent); border-radius: 0 var(--radius) var(--radius) 0; margin: 14px 0; color: var(--ink-strong); }
+.stats { display: flex; gap: 12px; margin-top: 14px; }
+.stat { flex: 1; background: var(--surface); border-radius: var(--radius); padding: 10px 14px; }
+.stat .k { font-size: 13px; color: var(--muted); }
+.stat .v { font-size: 26px; font-weight: 800; color: var(--ink-strong); font-variant-numeric: tabular-nums; font-family: var(--font-display); }
+.ctrl { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; margin-top: 12px; font-size: 15px; }
+.btn { font: inherit; font-size: 14px; font-weight: 600; border: 1px solid var(--accent); background: var(--accent); color: var(--accent-ink); padding: 6px 14px; border-radius: var(--radius); cursor: pointer; }
+.btn.ghost { background: transparent; color: var(--accent); }
+.btn[aria-pressed="true"] { background: var(--accent); color: var(--accent-ink); }
+.ctrl label { display: flex; align-items: center; gap: 8px; color: var(--ink); }
+.ctrl input[type=range] { accent-color: var(--accent); width: 150px; }
+.ctrl output { min-width: 3.2em; font-variant-numeric: tabular-nums; font-weight: 700; color: var(--ink-strong); }
+svg text { font-family: var(--font-body); }
+canvas { display: block; }
+.vizbox { position: relative; background: var(--bg); }
+.legend { display: flex; gap: 16px; font-size: 14px; color: var(--muted); margin-top: 6px; }
+.legend i { display: inline-block; width: 14px; height: 4px; vertical-align: middle; margin-right: 6px; border-radius: 2px; }
+.katex { font-size: 1.05em; }
+
+/* ---------- 표지 ---------- */
+.cover .c-num { position: absolute; left: 72px; top: 0; width: 74px; height: 74px; background: var(--accent); color: #fff; display: grid; place-items: center; font-size: 34px; font-weight: 700; }
+.cover .c-eyebrow { display: none; }
+.cover h1 { margin: 120px 0 0; font-size: 60px; font-weight: 500; color: var(--accent); letter-spacing: -0.02em; line-height: 1.15; }
+.cover .c-sub { margin: 14px 0 0; font-size: 30px; color: var(--accent); font-weight: 400; }
+.cover .c-meta { position: absolute; left: 72px; bottom: 70px; font-size: 15px; line-height: 1.7; color: var(--accent); }
+.cover .c-meta .k { display: inline-block; width: 4.5em; color: var(--muted); }
+.cover .c-art { position: absolute; right: 60px; top: 70px; width: 560px; height: 560px; }
+
+/* ---------- Contents ---------- */
+.toc-wrap { position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); width: 760px; }
+.toc-head { display: flex; height: 40px; }
+.toc-head .tag { width: 150px; background: var(--accent); color: #fff; font-size: 15px; display: flex; align-items: center; padding-left: 14px; clip-path: polygon(0 0, 82% 0, 100% 100%, 0 100%); }
+.toc-head .ttl { flex: 1; background: #c0c0c0; color: #222; font-weight: 700; letter-spacing: .35em; display: flex; align-items: center; justify-content: center; font-size: 17px; margin-left: -18px; clip-path: polygon(4% 0, 100% 0, 100% 100%, 0 100%); }
+.toc { list-style: none; margin: 0; padding: 6px 0; border-bottom: 5px solid #c0c0c0; }
+.toc li { display: grid; grid-template-columns: 90px 1fr 1fr; align-items: center; height: 54px; font-size: 18px; }
+.toc .n { text-align: center; color: var(--ink); font-size: 16px; }
+.toc .t { font-weight: 700; color: var(--ink-strong); text-align: center; }
+.toc .d { color: var(--muted); font-size: 15px; }
+
+/* ---------- 질문 ---------- */
+.question .q { position: absolute; left: 120px; right: 120px; top: 50%; transform: translateY(-50%); }
+.question .q-eyebrow { font-size: 20px; color: var(--accent); font-weight: 700; margin-bottom: 26px; }
+.question .q p { font-size: 40px; font-weight: 700; line-height: 1.45; margin: 0 0 30px; color: var(--ink-strong); }
+.question .q p .n { color: var(--accent); margin-right: 18px; font-family: var(--font-display); }
+
+/* ---------- 학습 목표 ---------- */
+.goals .g-title { position: absolute; top: 34px; left: 0; right: 0; text-align: center; font-size: 17px; color: var(--ink); }
+.goals .g-title::before { content: ""; display: block; width: 80px; height: 2px; background: var(--accent); margin: 0 auto 10px; }
+.goals .g-art { position: absolute; left: 96px; top: 150px; width: 470px; height: 380px; background: #26282e; overflow: hidden; }
+.goals .g-list { position: absolute; left: 610px; right: 96px; top: 150px; display: grid; gap: 26px; }
+.goal { background: var(--accent); color: #fff; padding: 18px 26px 20px; box-shadow: 6px 6px 0 rgba(0,0,0,.12); }
+.goal h3 { margin: 0 0 10px; font-size: 17px; font-weight: 500; }
+.goal ul { margin: 0; padding-left: 20px; font-size: 19px; line-height: 1.55; }
+
+/* ---------- 연습 단계 ---------- */
+.steps { list-style: none; margin: 0; padding: 0; counter-reset: s; display: grid; gap: 10px; }
+.steps li { counter-increment: s; display: grid; grid-template-columns: 40px 1fr; gap: 12px; align-items: start; font-size: 18px; }
+.steps li::before { content: counter(s); width: 32px; height: 32px; display: grid; place-items: center; background: var(--accent); color: var(--accent-ink); font-weight: 800; border-radius: var(--radius); }
+.steps code, pre.code { font-family: "JetBrains Mono", Consolas, monospace; }
+.steps code { display: block; margin-top: 4px; font-size: 14.5px; color: var(--muted); }
+.checks { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-top: 18px; }
+.checks div { background: var(--surface); border-radius: var(--radius); padding: 12px 16px; font-size: 15px; line-height: 1.5; }
+.checks b { display: block; font-size: 13px; color: var(--accent); margin-bottom: 4px; }
+pre.code { margin: 0; background: #1e1e22; color: #e8e8e8; font-size: 15px; line-height: 1.6; padding: 18px 20px; border-radius: var(--radius); overflow: auto; }
+pre.code .c { color: #8a8f98; }
+pre.code .k { color: #ff7b72; }
+pre.code .s { color: #a5d6ff; }
+pre.code .f { color: #d2a8ff; }
+.shot { width: 100%; border: 1px solid var(--hair); border-radius: var(--radius); background: var(--bg); }
+.shot.dark { display: none; }
+
+/* ---------- 정리 카드 ---------- */
+.cards { display: grid; grid-template-columns: repeat(3, 1fr); gap: 22px; margin-top: 10px; }
+.card { background: var(--surface); border-top: 5px solid var(--accent); padding: 22px 24px; border-radius: var(--radius-lg); min-height: 230px; }
+.card .ck { font-size: 14px; color: var(--accent); font-weight: 700; }
+.card h3 { margin: 8px 0 12px; font-size: 22px; color: var(--ink-strong); }
+.card p { margin: 0; font-size: 16.5px; line-height: 1.6; }
+
+/* ---------- 확률변수 매핑 ---------- */
+.mapping { position: relative; height: 380px; margin-top: 40px; }
+.g-art .gcurve { stroke: #e32a2c; }
+[data-concept="discord"] .g-art .gcurve { stroke: var(--green); }
+.mapping .col { position: absolute; top: 10px; display: grid; gap: 22px; }
+.mapping .outs { left: 0; }
+.mapping .nums { left: 380px; top: 46px; gap: 70px; }
+.chip { display: flex; align-items: center; gap: 8px; padding: 10px 14px; background: var(--surface); border-radius: var(--radius); font-size: 17px; width: 200px; }
+.coin { width: 34px; height: 34px; border-radius: 50%; display: grid; place-items: center; font-size: 14px; font-weight: 800; border: 2px solid var(--accent); color: var(--accent); background: var(--bg); }
+.coin.h { background: var(--accent); color: var(--accent-ink); }
+.num { width: 64px; height: 64px; border-radius: 50%; display: grid; place-items: center; font-size: 28px; font-weight: 800; background: var(--ink-strong); color: var(--bg); font-family: var(--font-display); }
+.mapping svg.arrows { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; pointer-events: none; }
+.mapping .sx { position: absolute; left: 0; top: -30px; font-size: 15px; color: var(--muted); }
+.mapping .rx { position: absolute; left: 372px; top: -30px; font-size: 15px; color: var(--muted); }
+.ptable { width: 100%; border-collapse: collapse; font-size: 18px; text-align: center; margin-bottom: 14px; }
+.ptable th, .ptable td { border-bottom: 1px solid var(--hair); padding: 8px; }
+.ptable th { background: var(--surface-2); font-weight: 700; }
+.pbars { display: flex; align-items: flex-end; gap: 26px; height: 150px; padding: 0 30px; border-bottom: 2px solid var(--viz-axis); }
+.pbars div { flex: 1; background: var(--viz-1); border-radius: 4px 4px 0 0; height: 0; position: relative; }
+.pbars div span { position: absolute; top: -24px; left: 0; right: 0; text-align: center; font-size: 14px; color: var(--ink); }
+.pbars-x { display: flex; gap: 26px; padding: 6px 30px 0; font-size: 15px; color: var(--muted); }
+.pbars-x span { flex: 1; text-align: center; }
+
+/* ---------- 컨트롤 바 (발표 화면 밖) ---------- */
+.hud { position: fixed; right: 14px; top: 12px; display: flex; gap: 6px; z-index: 50; font-family: var(--font-body); opacity: 0; transition: opacity .3s; }
+body.show-hud .hud, .hud:hover { opacity: 1; }
+.hud button { font: inherit; font-size: 12px; padding: 5px 10px; border-radius: 6px; border: 1px solid #888; background: #fff; color: #222; cursor: pointer; }
+.hud button[aria-pressed="true"] { background: #222; color: #fff; }
+.notes { position: fixed; left: 0; right: 0; bottom: 0; max-height: 30vh; overflow: auto; background: rgba(20,20,24,.94); color: #f2f2f2; font-size: 16px; line-height: 1.6; padding: 14px 22px 18px; z-index: 40; }
+.notes b { color: #ffb4b4; margin-right: 8px; }
+
+/* =========================================================
+   컨셉 A 전용 크롬 (PPT 양식)
+   ========================================================= */
+[data-concept="ppt"] .stage::after { content: ""; position: absolute; left: 0; right: 0; bottom: 0; height: 7px; background: var(--accent); z-index: 6; }
+[data-concept="ppt"] .sh { border-bottom: 2px solid var(--accent); top: 22px; height: 42px; }
+[data-concept="ppt"] .sh-num { height: 42px; min-width: 220px; padding-left: 26px; display: flex; align-items: center; background: var(--accent); color: #fff; font-size: 22px; font-weight: 500; clip-path: polygon(0 0, 100% 0, 86% 100%, 0 100%); }
+[data-concept="ppt"] .sh-sec { color: var(--accent); font-size: 26px; font-weight: 500; padding-right: 30px; }
+[data-concept="ppt"] .shot.light { display: block; }
+
+/* =========================================================
+   컨셉 B 전용 (Discord) — 인디고 캔버스 + 그라디언트 메시
+   ========================================================= */
+[data-concept="discord"] .stage { background: var(--bg); }
+[data-concept="discord"] .stage::before {
+  content: ""; position: absolute; inset: -20%; z-index: 0; pointer-events: none;
+  background:
+    radial-gradient(40% 35% at 85% 10%, rgba(88,101,242,.55), transparent 70%),
+    radial-gradient(35% 30% at 100% 90%, rgba(236,72,189,.35), transparent 70%),
+    radial-gradient(30% 30% at 0% 100%, rgba(88,101,242,.25), transparent 70%);
+  animation: mesh 18s ease-in-out infinite alternate;
+}
+@keyframes mesh { to { transform: translate(-4%, 3%) rotate(4deg); } }
+[data-concept="discord"] .slide { z-index: 1; }
+[data-concept="discord"] .sh { top: 34px; left: 72px; right: 72px; justify-content: flex-start; gap: 10px; }
+[data-concept="discord"] .sh-num { background: var(--magenta); color: #fff; padding: 5px 14px; border-radius: 50px; font-size: 15px; }
+[data-concept="discord"] .sh-sec { color: var(--muted); font-size: 15px; letter-spacing: .12em; text-transform: uppercase; font-weight: 600; }
+[data-concept="discord"] .slide.content { padding-top: 100px; }
+[data-concept="discord"] .hl .star { display: none; }
+[data-concept="discord"] .label b { background: var(--green); color: #000; border-radius: 50px; }
+[data-concept="discord"] .formula { border-left: 0; border-radius: var(--radius); background: var(--surface); }
+[data-concept="discord"] .btn { border-radius: 12px; border-color: var(--accent); }
+[data-concept="discord"] .btn.ghost { color: #fff; background: var(--surface); border-color: var(--surface-2); }
+[data-concept="discord"] .btn.go { background: var(--green); border-color: var(--green); color: #000; }
+[data-concept="discord"] .bul li::before { background: var(--green); }
+[data-concept="discord"] .vizbox { background: transparent; }
+[data-concept="discord"] .panel { background: rgba(30,35,83,.85); }
+[data-concept="discord"] .coin { border-color: var(--accent); color: #fff; background: transparent; }
+[data-concept="discord"] .coin.h { background: var(--accent); }
+[data-concept="discord"] .num { background: var(--green); color: #000; }
+[data-concept="discord"] .shot.dark { display: block; }
+[data-concept="discord"] .shot.light { display: none; }
+[data-concept="discord"] pre.code { background: #000; border-radius: 24px; }
+[data-concept="discord"] .card { border-top: 0; border-radius: 32px; }
+[data-concept="discord"] .card:nth-child(1) { background: linear-gradient(140deg, #5865f2, #3b44b8); }
+[data-concept="discord"] .card:nth-child(2) { background: linear-gradient(140deg, #ec48bd, #9b2f9a); }
+[data-concept="discord"] .card:nth-child(3) { background: var(--surface); }
+[data-concept="discord"] .card .ck { color: rgba(255,255,255,.8); }
+[data-concept="discord"] .card:nth-child(3) .ck { color: var(--green); }
+[data-concept="discord"] .card h3, [data-concept="discord"] .card p { color: #fff; }
+[data-concept="discord"] .checks b { color: var(--green); }
+[data-concept="discord"] .steps li::before { border-radius: 50%; background: var(--magenta); }
+
+/* Discord 표지 */
+[data-concept="discord"] .cover .c-num { display: none; }
+[data-concept="discord"] .cover .c-eyebrow { display: block; position: absolute; left: 72px; top: 92px; font-family: "Hanken Grotesk", sans-serif; font-weight: 800; font-size: 76px; line-height: .98; color: #fff; text-transform: uppercase; letter-spacing: -0.01em; }
+[data-concept="discord"] .cover h1 { margin-top: 210px; color: #fff; font-weight: 800; font-size: 46px; }
+[data-concept="discord"] .cover .c-sub { color: var(--muted); font-size: 24px; }
+[data-concept="discord"] .cover .c-meta { color: var(--ink); }
+[data-concept="discord"] .cover .c-art { right: 40px; top: 120px; width: 520px; height: 520px; }
+
+/* Discord Contents */
+[data-concept="discord"] .toc-wrap { width: 1000px; }
+[data-concept="discord"] .toc-head { height: auto; margin-bottom: 22px; align-items: baseline; gap: 18px; }
+[data-concept="discord"] .toc-head .tag { clip-path: none; background: var(--magenta); border-radius: 50px; width: auto; padding: 6px 16px; font-size: 14px; }
+[data-concept="discord"] .toc-head .ttl { clip-path: none; background: none; color: #fff; justify-content: flex-start; letter-spacing: -0.01em; font-size: 44px; font-weight: 800; font-family: var(--font-display); margin: 0; }
+[data-concept="discord"] .toc { border: 0; display: grid; gap: 10px; padding: 0; }
+[data-concept="discord"] .toc li { background: var(--surface); border-radius: 16px; height: 62px; grid-template-columns: 90px 380px 1fr; }
+[data-concept="discord"] .toc .n { color: var(--green); font-family: var(--font-display); font-weight: 800; font-size: 22px; }
+[data-concept="discord"] .toc .t { text-align: left; color: #fff; }
+
+/* Discord 질문 */
+[data-concept="discord"] .question .q-eyebrow { color: var(--green); text-transform: uppercase; letter-spacing: .12em; font-size: 16px; }
+[data-concept="discord"] .question .q p { font-size: 48px; font-weight: 800; color: #fff; }
+[data-concept="discord"] .question .q p .n { color: var(--magenta); }
+
+/* Discord 학습 목표 */
+[data-concept="discord"] .goals .g-title { font-family: var(--font-display); font-weight: 800; font-size: 44px; color: #fff; text-align: left; left: 72px; top: 60px; }
+[data-concept="discord"] .goals .g-title::before { display: none; }
+[data-concept="discord"] .goals .g-art { border-radius: 40px; background: var(--surface); top: 160px; left: 72px; }
+[data-concept="discord"] .goals .g-list { top: 160px; }
+[data-concept="discord"] .goal { border-radius: 32px; box-shadow: 0 3px 68px rgba(69,42,124,.25); background: var(--accent); }
+[data-concept="discord"] .goal + .goal { background: var(--magenta); }
