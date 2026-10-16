@@ -1,0 +1,376 @@
+<!doctype html>
+<html lang="ko" data-concept="ppt">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>확률과 통계 — 하이라이트 샘플</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@700;800&display=swap">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.css">
+<link rel="stylesheet" href="assets/css/deck.css">
+</head>
+<body>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol id="star" viewBox="0 0 34 34">
+    <path d="M17 1 L31 9 L31 25 L17 33 L3 25 L3 9 Z" fill="var(--accent)"/>
+    <path d="M17 8.5l2.4 5.6 6 .5-4.6 3.9 1.4 5.9L17 21.3l-5.2 3.1 1.4-5.9-4.6-3.9 6-.5z" fill="#fff"/>
+  </symbol>
+</svg>
+
+<main class="stage" data-title="데이터분석 입문 · 확률과 통계">
+
+  <!-- S01 표지 -->
+  <section class="slide cover" data-part="표지"
+    data-notes="30초. 교과서 Ⅲ단원(통계) 기반 · 데이터분석 관점 재구성 안내.">
+    <div class="c-num">Ⅲ</div>
+    <div class="c-eyebrow anim">Probability<br>&amp; Statistics</div>
+    <h1 class="anim">데이터분석 입문</h1>
+    <p class="c-sub anim">확률과 통계 · 분포와 추정</p>
+    <div class="c-meta anim">
+      <div><span class="k">대상</span>데이터분석 입문 · 비전공 대학생</div>
+      <div><span class="k">일시·장소</span>확정 후 기입</div>
+      <div><span class="k">강사</span>조성호 · 부산대학교 AI융합교육원 강사 / KODE KOREA(코드코리아) 대표</div>
+    </div>
+    <div class="c-art" data-viz="cover"></div>
+  </section>
+
+  <!-- S02 Contents -->
+  <section class="slide toc-slide" data-part="Contents" data-notes="파트별 시간 확정 후 기입.">
+    <div class="toc-wrap">
+      <div class="toc-head anim"><span class="tag">Contents</span><span class="ttl">확률과 통계</span></div>
+      <ol class="toc">
+        <li class="anim"><span class="n">01</span><span class="t">확률변수와 확률분포</span><span class="d">결과 → 숫자 · 분포표</span></li>
+        <li class="anim"><span class="n">02</span><span class="t">이항분포 · 큰수의 법칙</span><span class="d">갈톤 보드 · 상대도수 수렴</span></li>
+        <li class="anim"><span class="n">03</span><span class="t">정규분포 · 표준화</span><span class="d">N(m, σ²) · Z 점수</span></li>
+        <li class="anim"><span class="n">04</span><span class="t">표본평균 · 신뢰구간</span><span class="d">표본 하나 → 모평균 추정</span></li>
+        <li class="anim"><span class="n">05</span><span class="t">Python 실습</span><span class="d">seaborn 분포 시각화</span></li>
+      </ol>
+    </div>
+  </section>
+
+  <!-- S03 들어가기 전에 -->
+  <section class="slide question" data-part="들어가기 전에"
+    data-notes="답 공개 없음. 1번 답 ≈ 0.0796 (약 8%) → S06·S08에서 회수. 2번 → S12 신뢰구간에서 회수.">
+    <div class="q">
+      <div class="q-eyebrow anim">들어가기 전에…</div>
+      <p class="anim"><span class="n">1</span>동전 100번 → 앞면 정확히 50번, 확률은?</p>
+      <p class="anim"><span class="n">2</span>1,000명 설문 → 전체 의견 추정, 근거는?</p>
+    </div>
+  </section>
+
+  <!-- S04 학습 목표 -->
+  <section class="slide goals" data-part="학습 목표" data-notes="목표 2 결과물 = 연습 단계 1 노트북.">
+    <div class="g-title anim">학습 목표</div>
+    <div class="g-art anim">
+      <svg viewBox="0 0 470 380" width="100%" height="100%">
+        <g stroke="rgba(255,255,255,.08)">
+          <path d="M0 76H470M0 152H470M0 228H470M0 304H470M94 0V380M188 0V380M282 0V380M376 0V380"/>
+        </g>
+        <g fill="rgba(255,255,255,.18)">
+          <rect x="60" y="300" width="34" height="40" rx="3"/><rect x="100" y="250" width="34" height="90" rx="3"/>
+          <rect x="140" y="180" width="34" height="160" rx="3"/><rect x="180" y="120" width="34" height="220" rx="3"/>
+          <rect x="220" y="96" width="34" height="244" rx="3"/><rect x="260" y="130" width="34" height="210" rx="3"/>
+          <rect x="300" y="190" width="34" height="150" rx="3"/><rect x="340" y="260" width="34" height="80" rx="3"/>
+          <rect x="380" y="306" width="34" height="34" rx="3"/>
+        </g>
+        <path class="gcurve" d="M30 336 C130 330 160 90 237 90 S 344 330 444 336" fill="none" stroke-width="5"/>
+        <text x="30" y="44" fill="rgba(255,255,255,.85)" font-size="20" font-weight="700">X ~ B(n, p) ≈ N(np, npq)</text>
+      </svg>
+    </div>
+    <div class="g-list">
+      <div class="goal anim"><h3>목표 1</h3>
+        <ul><li>확률변수 · 확률분포 개념 이해</li><li>이항분포 · 정규분포의 모양과 평균 · 표준편차 해석</li></ul></div>
+      <div class="goal anim"><h3>목표 2</h3>
+        <ul><li>표본평균의 분포 · 신뢰구간 해석</li><li>Python(seaborn) 분포 시각화</li><li>최종 결과물: 분포 시각화 노트북 1개</li></ul></div>
+    </div>
+  </section>
+
+  <!-- S05 1-1 확률변수 -->
+  <section class="slide content" data-part="01 확률변수"
+    data-notes="화살표 재생 후 질문: 엑셀 열 하나가 왜 확률변수인가. 수강생 답 1~2개.">
+    <header class="sh"><span class="sh-num">1-1</span><span class="sh-sec">확률변수란?</span></header>
+    <h2 class="hl anim"><svg class="star"><use href="#star"/></svg>확률변수 = 시행 결과 → 숫자 대응 규칙</h2>
+    <div class="two">
+      <div class="mapping anim" data-viz="mapping">
+        <span class="sx">표본공간 S · 동전 2개</span><span class="rx">X = 앞면 개수</span>
+        <div class="col outs">
+          <div class="chip" data-x="2"><span class="coin h">앞</span><span class="coin h">앞</span></div>
+          <div class="chip" data-x="1"><span class="coin h">앞</span><span class="coin">뒤</span></div>
+          <div class="chip" data-x="1"><span class="coin">뒤</span><span class="coin h">앞</span></div>
+          <div class="chip" data-x="0"><span class="coin">뒤</span><span class="coin">뒤</span></div>
+        </div>
+        <div class="col nums">
+          <div class="num" data-v="2">2</div><div class="num" data-v="1">1</div><div class="num" data-v="0">0</div>
+        </div>
+      </div>
+      <div class="panel anim">
+        <table class="ptable">
+          <tr><th>$X$</th><td>0</td><td>1</td><td>2</td><td>합계</td></tr>
+          <tr><th>$P(X=x)$</th><td>$\frac14$</td><td>$\frac24$</td><td>$\frac14$</td><td>1</td></tr>
+        </table>
+        <div class="pbars"><div data-h="50"><span>1/4</span></div><div data-h="100"><span>2/4</span></div><div data-h="50"><span>1/4</span></div></div>
+        <div class="pbars-x"><span>0</span><span>1</span><span>2</span></div>
+      </div>
+    </div>
+    <p class="label anim"><b>핵심</b>데이터 표의 열 하나 = 확률변수 하나 · 열 값의 분포 = 확률분포<span class="ref">R01 p.81–82</span></p>
+  </section>
+
+  <!-- S06 2-1 갈톤 보드 -->
+  <section class="slide content" data-part="02 이항분포"
+    data-notes="자동 재생. p 슬라이더 0.2 → 치우침 시연. +500으로 이론선 일치 확인.">
+    <header class="sh"><span class="sh-num">2-1</span><span class="sh-sec">이항분포</span></header>
+    <h2 class="hl anim"><svg class="star"><use href="#star"/></svg>갈톤 보드 = 이항분포 B(n, p) 실험 장치</h2>
+    <div class="two" data-viz="galton">
+      <div class="vizbox anim"><canvas style="width:600px;height:440px"></canvas></div>
+      <div class="anim">
+        <ul class="bul">
+          <li>못 1개 = 시행 1회 · 오른쪽 = 성공 (확률 p)</li>
+          <li>칸 번호 k = 성공 횟수 X · 못 n = 10줄</li>
+        </ul>
+        <div class="formula">$P(X=k)={}_{n}\mathrm{C}_{k}\,p^{k}q^{n-k}$</div>
+        <div class="stats">
+          <div class="stat"><div class="k">공 수</div><div class="v" data-s="N">0</div></div>
+          <div class="stat"><div class="k">평균 x̄ / np</div><div class="v"><span data-s="mean">—</span> / <span data-s="np">5.00</span></div></div>
+        </div>
+        <div class="stats">
+          <div class="stat"><div class="k">분산 / npq</div><div class="v"><span data-s="var">—</span> / <span data-s="npq">2.50</span></div></div>
+        </div>
+        <div class="ctrl">
+          <button class="btn" data-act="play">일시정지</button>
+          <button class="btn ghost" data-act="burst">+500개</button>
+          <button class="btn ghost" data-act="reset">초기화</button>
+          <label>p <input type="range" name="p" min="0.1" max="0.9" step="0.05" value="0.5"><output name="p">0.50</output></label>
+        </div>
+        <div class="legend"><span><i style="background:var(--viz-1)"></i>실험 결과</span><span><i style="background:var(--viz-2)"></i>이론값 N·P(X=k)</span></div>
+      </div>
+    </div>
+    <p class="label anim"><b>핵심</b>$E(X)=np$ · $V(X)=npq$<span class="ref">R01 p.93–95</span></p>
+  </section>
+
+  <!-- S07 2-2 큰수의 법칙 -->
+  <section class="slide content" data-part="02 이항분포"
+    data-notes="선 3개 = 같은 실험 3회. 초반 요동 → 띠 안으로 수렴 강조. 표 수치 = 교과서 계산값.">
+    <header class="sh"><span class="sh-num">2-2</span><span class="sh-sec">큰수의 법칙</span></header>
+    <h2 class="hl anim"><svg class="star"><use href="#star"/></svg>시행 횟수 ↑ → 상대도수 X/n → 수학적 확률 p</h2>
+    <div class="two" data-viz="lln">
+      <div class="vizbox anim">
+        <canvas style="width:100%;height:360px"></canvas>
+        <div class="legend"><span><i style="background:var(--viz-1)"></i>주사위 1의 상대도수 · 같은 실험 3회 · 가로축 로그 눈금</span><span><i style="background:var(--viz-soft);height:10px"></i>|X/n − 1/6| &lt; 0.1</span></div>
+      </div>
+      <div class="anim">
+        <div class="stats">
+          <div class="stat"><div class="k">던진 횟수 n</div><div class="v" data-s="n">0</div></div>
+          <div class="stat"><div class="k">상대도수</div><div class="v" data-s="f">—</div></div>
+        </div>
+        <p class="sub muted" style="font-size:15px;margin-top:18px">$P(|X/n-1/6|<0.1)$ 교과서 계산값</p>
+        <div class="stats" style="margin-top:6px">
+          <div class="stat"><div class="k">n = 10</div><div class="v">0.614</div></div>
+          <div class="stat"><div class="k">n = 30</div><div class="v">0.784</div></div>
+          <div class="stat"><div class="k">n = 50</div><div class="v">0.946</div></div>
+        </div>
+        <div class="ctrl"><button class="btn" data-act="again">다시 던지기</button></div>
+      </div>
+    </div>
+    <p class="label anim"><b>핵심</b>데이터 많을수록 비율 추정 안정 · 데이터분석의 출발점<span class="ref">R01 p.97–98</span></p>
+  </section>
+
+  <!-- S08 2-3 이항 → 정규 (manim) -->
+  <section class="slide content" data-part="02 이항분포"
+    data-notes="manim 렌더 영상 11초. S03 질문 1 회수: 정규 근사로 계산 가능.">
+    <header class="sh"><span class="sh-num">2-3</span><span class="sh-sec">이항분포 → 정규분포</span></header>
+    <h2 class="hl anim"><svg class="star"><use href="#star"/></svg>n ↑ → 이항분포 B(n, p) ≈ 정규분포 N(np, npq)</h2>
+    <div class="two">
+      <div class="anim" data-viz="video">
+        <video class="shot light" src="assets/video/binom_light.mp4" preload="auto" muted playsinline></video>
+        <video class="shot dark" src="assets/video/binom_dark.mp4" preload="auto" muted playsinline></video>
+        <div class="ctrl"><button class="btn ghost" onclick="Viz.enter(this.closest('.slide'))">다시 재생</button></div>
+      </div>
+      <div class="anim">
+        <ul class="bul">
+          <li>막대 = B(n, 1/2) 확률 · 가로축 표준화</li>
+          <li>n = 1 → 64 · 막대 윤곽 → 종 모양</li>
+          <li>n 충분히 큼 → 정규분포로 근사 계산</li>
+        </ul>
+        <div class="formula">$B(n,p)\;\approx\;N(np,\,npq)$</div>
+        <p class="sub muted" style="font-size:15px">제작: manim (Python 수학 애니메이션)</p>
+      </div>
+    </div>
+    <p class="label anim"><b>핵심</b>복잡한 이항 확률 계산 → 표준정규분포표 하나로 처리<span class="ref">R01 p.105–107</span></p>
+  </section>
+
+  <!-- S09 3-1 정규분포 -->
+  <section class="slide content" data-part="03 정규분포"
+    data-notes="자동 재생 후 슬라이더 직접 조작. 1σ · 2σ · 3σ 버튼으로 넓이 비교.">
+    <header class="sh"><span class="sh-num">3-1</span><span class="sh-sec">정규분포</span></header>
+    <h2 class="hl anim"><svg class="star"><use href="#star"/></svg>N(m, σ²) = 평균 m → 위치 · 표준편차 σ → 퍼짐</h2>
+    <div class="two" data-viz="normal">
+      <div class="anim">
+        <div class="plot vizbox"></div>
+        <div class="ctrl">
+          <label>m <input type="range" name="m" min="-3" max="3" step="0.1" value="0"><output name="m">0.0</output></label>
+          <label>σ <input type="range" name="s" min="0.5" max="2" step="0.05" value="1"><output name="s">1.00</output></label>
+          <button class="btn ghost" data-k="1">±1σ</button><button class="btn ghost" data-k="2">±2σ</button><button class="btn ghost" data-k="3">±3σ</button>
+          <button class="btn go" data-act="demo">자동 재생</button>
+        </div>
+      </div>
+      <div class="anim">
+        <ul class="bul">
+          <li>m 변화 → 곡선 좌우 이동</li>
+          <li>σ ↑ → 낮고 넓게 · σ ↓ → 높고 좁게</li>
+          <li>곡선 아래 넓이 = 1 · x = m 대칭</li>
+          <li>점선 = 표준정규분포 N(0, 1)</li>
+        </ul>
+        <div class="formula">$f(x)=\dfrac{1}{\sqrt{2\pi}\,\sigma}\,e^{-\frac{(x-m)^2}{2\sigma^2}}$</div>
+      </div>
+    </div>
+    <p class="label anim"><b>핵심</b>키 · 측정 오차 · 제품 수명 → 정규분포 근사<span class="ref">R01 p.99–100</span></p>
+  </section>
+
+  <!-- S10 3-2 표준화 -->
+  <section class="slide content" data-part="03 정규분포"
+    data-notes="곡선 고정 · 눈금 3줄 순서대로 등장. 교과서 예제 2 그대로.">
+    <header class="sh"><span class="sh-num">3-2</span><span class="sh-sec">표준화</span></header>
+    <h2 class="hl anim"><svg class="star"><use href="#star"/></svg>표준화 = 곡선 그대로 · 눈금만 교체</h2>
+    <div class="two" data-viz="zscore">
+      <div class="plot vizbox anim"></div>
+      <div class="anim">
+        <div class="formula">$Z=\dfrac{X-m}{\sigma}\;\sim\;N(0,\,1)$</div>
+        <p class="sub" style="font-size:18px">예제: $X\sim N(50,\,15^2)$ · $P(35\le X\le 80)$</p>
+        <div class="stats">
+          <div class="stat"><div class="k">확률</div><div class="v" data-prob style="font-size:40px">0.0000</div></div>
+        </div>
+        <p class="sub" data-break style="font-size:17px;margin-top:10px">$=P(-1\le Z\le 2)=0.3413+0.4772$</p>
+        <div class="ctrl"><button class="btn ghost" data-act="replay">다시 재생</button></div>
+      </div>
+    </div>
+    <p class="label anim"><b>핵심</b>단위 다른 두 데이터 비교 → Z 점수<span class="ref">R01 p.102–103</span></p>
+  </section>
+
+  <!-- S11 4-1 표본평균의 분포 -->
+  <section class="slide content" data-part="04 추정"
+    data-notes="처음 5개 표본 느리게 → 이후 빠르게. n = 1 → 5 → 30 순서로 비교. 모집단은 예시용 분포.">
+    <header class="sh"><span class="sh-num">4-1</span><span class="sh-sec">표본평균의 분포</span></header>
+    <h2 class="hl anim"><svg class="star"><use href="#star"/></svg>표본평균 X̄ ~ N(m, σ²/n) · 모집단 모양 무관</h2>
+    <div class="two" style="grid-template-columns:1.9fr 1fr" data-viz="clt">
+      <div class="vizbox anim">
+        <canvas style="width:100%;height:380px"></canvas>
+        <div class="legend"><span><i style="background:var(--viz-hi)"></i>표본 n개</span><span><i style="background:var(--viz-1)"></i>표본평균 x̄ 누적</span><span><i style="background:var(--viz-2)"></i>이론 N(m, σ²/n)</span></div>
+      </div>
+      <div class="anim">
+        <div class="ctrl" style="margin-top:0">표본 크기
+          <button class="btn ghost" data-n="1">n = 1</button><button class="btn ghost" data-n="5">n = 5</button><button class="btn ghost" data-n="30">n = 30</button>
+        </div>
+        <div class="stats">
+          <div class="stat"><div class="k">표본평균 개수</div><div class="v" data-s="k">0</div></div>
+        </div>
+        <div class="stats">
+          <div class="stat"><div class="k">x̄들의 평균 (m = 2)</div><div class="v" data-s="mu">—</div></div>
+        </div>
+        <div class="stats">
+          <div class="stat"><div class="k">x̄ 표준편차 / σ/√n</div><div class="v"><span data-s="sd">—</span> / <span data-s="th">—</span></div></div>
+        </div>
+        <p class="sub muted" style="font-size:14px;margin-top:10px">모집단: 평균 2 · 표준편차 √2 예시 분포</p>
+      </div>
+    </div>
+    <p class="label anim"><b>핵심</b>n ↑ → x̄ 퍼짐 ↓ (σ/√n) · 치우친 데이터도 평균은 종 모양<span class="ref">R01 p.119–123</span></p>
+  </section>
+
+  <!-- S12 4-2 신뢰구간 -->
+  <section class="slide content" data-part="04 추정"
+    data-notes="S03 질문 2 회수. 데모는 20개 중 빗나감 1개 이상 나오도록 재추출. 100개 버튼으로 약 95% 확인.">
+    <header class="sh"><span class="sh-num">4-2</span><span class="sh-sec">모평균의 신뢰구간</span></header>
+    <h2 class="hl anim"><svg class="star"><use href="#star"/></svg>신뢰도 95% = 같은 방법 100번 → 약 95개 구간이 m 포함</h2>
+    <div class="two" data-viz="ci">
+      <div class="plot vizbox anim"></div>
+      <div class="anim">
+        <div class="formula" style="font-size:19px">$\bar{x}-1.96\dfrac{\sigma}{\sqrt n}\le m\le\bar{x}+1.96\dfrac{\sigma}{\sqrt n}$</div>
+        <p class="sub" style="font-size:17px">예시: σ = 20 g · n = 25 → x̄ ± 7.84 · 점선 m = 250</p>
+        <div class="stats">
+          <div class="stat"><div class="k">m 포함 구간</div><div class="v"><span data-s="hit">0</span> / <span data-s="tot">0</span></div></div>
+        </div>
+        <div class="ctrl"><button class="btn ghost" data-count="20">20개</button><button class="btn ghost" data-count="100">100개</button></div>
+        <ul class="bul" style="margin-top:14px;font-size:17px">
+          <li>m = 고정값 · 구간 = 표본마다 변동</li>
+        </ul>
+      </div>
+    </div>
+    <p class="label anim"><b>주의</b>"m이 이 구간에 있을 확률 95%" ✕ → 방법의 성공률 95% ○<span class="ref">R01 p.127–128</span></p>
+  </section>
+
+  <!-- S13 5-1 seaborn -->
+  <section class="slide content" data-part="05 Python 실습"
+    data-notes="코드 = 결과 이미지 생성 코드와 동일 (03_deck/tools/make_seaborn.py).">
+    <header class="sh"><span class="sh-num">5-1</span><span class="sh-sec">seaborn 시각화</span></header>
+    <h2 class="hl anim"><svg class="star"><use href="#star"/></svg>seaborn = 분포 시각화 한 줄</h2>
+    <div class="two even">
+      <pre class="code anim"><span class="k">import</span> numpy <span class="k">as</span> np
+<span class="k">import</span> seaborn <span class="k">as</span> sns
+
+rng = np.random.<span class="f">default_rng</span>(42)
+x = rng.<span class="f">binomial</span>(n=10, p=0.5, size=1000)
+<span class="c"># 갈톤 보드 공 1,000개</span>
+z = rng.<span class="f">normal</span>(loc=50, scale=15, size=1000)
+<span class="c"># N(50, 15²) 1,000개</span>
+
+sns.<span class="f">histplot</span>(x, discrete=<span class="k">True</span>, stat=<span class="s">"probability"</span>)
+sns.<span class="f">histplot</span>(z, kde=<span class="k">True</span>, stat=<span class="s">"density"</span>)</pre>
+      <div class="anim">
+        <img class="shot light" src="assets/img/seaborn_light.png" alt="이항분포와 정규분포 히스토그램 (seaborn)">
+        <img class="shot dark" src="assets/img/seaborn_dark.png" alt="이항분포와 정규분포 히스토그램 (seaborn)">
+      </div>
+    </div>
+    <p class="label anim"><b>핵심</b>시뮬레이션 1,000번 = 갈톤 보드 공 1,000개 · 코드 몇 줄로 재현</p>
+  </section>
+
+  <!-- S14 연습 단계 1 -->
+  <section class="slide content" data-part="05 Python 실습"
+    data-notes="15분 엄수. 10분 개별 → 5분 화면 공유 2명.">
+    <header class="sh"><span class="sh-num">5-2</span><span class="sh-sec">연습</span></header>
+    <h2 class="hl anim"><svg class="star"><use href="#star"/></svg>연습 단계 1 · 15분 — 분포 직접 그리기</h2>
+    <ol class="steps">
+      <li class="anim"><div>Google Colab 새 노트북 열기<code>colab.research.google.com</code></div></li>
+      <li class="anim"><div>5-1 코드 붙여넣기 → 실행<code>Shift + Enter</code></div></li>
+      <li class="anim"><div>p = 0.5 → 0.2 변경 → 막대 모양 비교<code>x = rng.binomial(n=10, p=0.2, size=1000)</code></div></li>
+      <li class="anim"><div>n = 10 → 100 변경 → 종 모양 확인<code>x = rng.binomial(n=100, p=0.5, size=1000)</code></div></li>
+    </ol>
+    <div class="checks anim">
+      <div><b>합격 조건</b>그래프 2개 출력 · p 변경 전후 비교 캡처 1장</div>
+      <div><b>확인 포인트</b>p = 0.2 → 왼쪽 치우침 · n ↑ → 종 모양</div>
+      <div><b>진행</b>10분 개별 · 5분 결과 공유</div>
+    </div>
+  </section>
+
+  <!-- S15 정리 -->
+  <section class="slide content" data-part="정리" data-notes="학습 목표 1:1 대응. 다음 차시 연결 확정 후 기입.">
+    <header class="sh"><span class="sh-num">정리</span><span class="sh-sec">확률과 통계</span></header>
+    <h2 class="hl anim"><svg class="star"><use href="#star"/></svg>정리</h2>
+    <div class="cards">
+      <div class="card anim"><div class="ck">목표 1</div><h3>분포 = 값 · 확률 대응표</h3>
+        <p>확률변수 = 결과 → 숫자 · 이항 B(n, p) · 정규 N(m, σ²) · 표준화 Z</p></div>
+      <div class="card anim"><div class="ck">목표 2</div><h3>추정 = 표본평균 ± 오차</h3>
+        <p>X̄ ~ N(m, σ²/n) · 95% 신뢰구간 x̄ ± 1.96σ/√n</p></div>
+      <div class="card anim"><div class="ck">결과물</div><h3>분포 시각화 노트북</h3>
+        <p>seaborn histplot · p · n 변경 비교 캡처</p></div>
+    </div>
+  </section>
+
+  <div class="foot"></div>
+</main>
+
+<div class="notes" hidden></div>
+<nav class="hud" aria-label="발표 도구">
+  <button data-prev>◀</button>
+  <button data-set-concept="ppt">A · PPT 양식</button>
+  <button data-set-concept="discord">B · Discord</button>
+  <button data-toggle-notes>노트 (N)</button>
+  <button data-next>▶</button>
+</nav>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.2/anime.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/contrib/auto-render.min.js"></script>
+<script src="assets/js/viz.js"></script>
+<script src="assets/js/deck.js"></script>
+</body>
+</html>

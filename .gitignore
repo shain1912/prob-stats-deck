@@ -1,0 +1,8 @@
+# 저작물·대용량 원본은 로컬에만 보관
+01_references/textbooks/
+01_references/**/*.pdf
+01_references/**/*.pptx
+_inbox/*
+!_inbox/.gitkeep
+__pycache__/
+*.pyc
